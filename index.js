@@ -22,6 +22,9 @@ app.use('/api/mhs',mhsRouter);
 const jurusanRouter = require('./routes/jurusan');
 app.use('/api/jurusan',jurusanRouter);
 
+const auth = require('./routes/auth/auth');
+app.use('/api/auth',auth);
+
 app.listen(port,() => {
     console.log(`aplikasi berjalan di http::localhost:${port}`)
 })

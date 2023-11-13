@@ -3,7 +3,9 @@ const router = express.Router();
 const {body, validationResult } = require('express-validator');
 const connection = require('../config/db');
 
-router.get('/', function (req, res) {
+const authenticateToken = require('../routes/auth/midleware/authenticateToken')
+
+router.get('/',authenticateToken, function (req, res) {
     connection.query('select * from jurusan ', function(err, rows){
         if(err){
             return res.status(500).json({
@@ -20,7 +22,7 @@ router.get('/', function (req, res) {
     });
 });
 
-router.post('/store', [
+router.post('/store', authenticateToken,[
     body('nama_jurusan').notEmpty(),
 ], (req, res) => {
     const error = validationResult (req);
@@ -75,7 +77,7 @@ router.post('/store', [
                     
          })
 
-         router.patch('/update/:id', [
+         router.patch('/update/:id', authenticateToken, [
             body('nama_jurusan').notEmpty(),
         ], (req, res) => {
             const error = validationResult(req);
@@ -104,7 +106,7 @@ router.post('/store', [
           })
         })
 
-        router.delete('/delete/(:id)', function(req, res){
+        router.delete('/delete/(:id)', authenticateToken ,function(req, res){
             let id = req.params.id;
             connection.query(`delete from jurusan where id_j = ${id}`, function (err, rows) {
                 if(err){
@@ -120,4 +122,6 @@ router.post('/store', [
                 }
             })
         })
-        module.exports = router;
+ module.exports = router;
+
+ 
